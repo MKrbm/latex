@@ -1,0 +1,70 @@
+\documentclass{ujarticle}
+
+% \usepackage[twoside,top=25truemm,bottom=20truemm,inner=30truemm,outer=20truemm]{geometry}
+
+\makeatletter
+\def\mojiparline#1{
+    \newcounter{mpl}
+    \setcounter{mpl}{#1}
+    \@tempdima=\linewidth
+    \advance\@tempdima by-\value{mpl}zw
+    \addtocounter{mpl}{-1}
+    \divide\@tempdima by \value{mpl}
+    \advance\kanjiskip by\@tempdima
+    \advance\parindent by\@tempdima
+}
+\makeatother
+\def\linesparpage#1{
+    \baselineskip=\textheight
+    \divide\baselineskip by #1
+}
+\usepackage{comment}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{ascmac}
+\usepackage{tikz}
+\usetikzlibrary{svg.path,arrows,chains,matrix,positioning,scopes,intersections,calc,through,trees, positioning}
+\usepackage{circuitikz}
+
+\title{基礎のニューラルネット}
+
+\newcommand\vc[1]{\boldsymbol{#1}}
+\newcommand\RR{\mathbb R}
+\newcommand\logi[1]{\varsigma(#1)}
+\newcommand\logid[1]{\varsigma'(#1)}
+
+\newcommand\relu[1]{\mathrm{ReLU}(#1)}
+
+\begin{document}
+% 一行あたり文字数の指定
+\mojiparline{40}
+% 1ページあたり行数の指定
+\linesparpage{38}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+% \input body.tex
+
+\subsection{深層化とバックプロパゲーション}
+\label{sec:back-propagation}
+
+\section{非階層型ニューラルネットモデル}
+\label{sec:non-hierarchical}
+
+\section{深層学習へのいざない}
+\label{sec:deep-learning}
+
+\subsection{深層学習を支える技術}
+\label{sec:basis-deep-learning}
+
+\subsection{深層学習の応用}
+\label{sec:application-of-deep-learning}
+
+\subsection{transformer}
+\input transformer.tex
+\end{document}
