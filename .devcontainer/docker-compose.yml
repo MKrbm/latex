@@ -1,8 +1,8 @@
 version: "3"
 services:
   ubuntu-texlive-ja:
-    # build: .
-    image: kei0709/ubuntu_latex_ja
+    build: .
+    # image: kei0709/ubuntu_latex_ja
     command: sleep infinity
     volumes:
       - ../:/home/user/project

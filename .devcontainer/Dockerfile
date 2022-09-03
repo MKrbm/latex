@@ -30,8 +30,9 @@ RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
 
-
-ENV PATH="/usr/local/texlive/2022/bin/x86_64-linux:${PATH}"
+RUN tlmgr_path=$(echo /usr/local/texlive/2022/bin/*-linux)
+ENV PATH="${tlmgr_path}:${PATH}"
 RUN tlmgr install latexmk
-RUN tlmgr install collection-langjapanese collection-langcjk xcomment
+RUN tlmgr install scheme-medium was
+USER $USERNAME
 RUN git config --global --add safe.directory /home/${USERNAME}/project
