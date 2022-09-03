@@ -34,7 +34,7 @@ transformerには他にもエンコーダ層のみを持つエンコーダtransf
 \begin{itembox}{\bf コラム　翻訳問題(seq2seq)}
   ある言語の文章を$X = [x_0, x_1, .., x_{L}]$、　別の言語の文章を$Z = [z_0, z_1, .., z_{L^\prime}]$であらわすとする。これらを用いると翻訳問題は以下の確率分布を求めることに対応する
   \begin{align}
-    P(X|Z) = P(x_0| Z) \cdot P(x_1| Z, x_0) \cdots P(x_L| Z, x_0, \ldots x_{L-1})
+    \Pr(X = \vc{x}|Z) = P(x_0| Z) \cdot P(x_1| Z, x_0) \cdots P(x_L| Z, x_0, \ldots x_{L-1})
   \end{align}
   最初の文字は\emph{bos}で固定されているため、実際は$x_1$から始まり文末を表す\emph{eos}が出現するまでの確率分布を求める。
 
