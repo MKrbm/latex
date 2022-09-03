@@ -84,7 +84,7 @@ transformerには他にもエンコーダ層のみを持つエンコーダtransf
   \item 扱える文章の最大長を変更することが容易である。
 \end{itemize}
 
-上の条件を満たすもので一番簡単なものは、単位円上の座標を表す二次元ベクトルである(図~\ref{fig:pos-encoding-circle})。角度が$0\degree$
+上の条件を満たすもので一番簡単なものは、単位円上の座標を表す二次元ベクトルである(図~\ref{fig:pos-encoding-circle})。角度が$\ang{0}$にある点が最初のトークンを表し、角度が$\ang{360}$にある点が、扱える文章の中の最後尾を表す(ある文章の中の最後のトークンとは限らないことに注意)。従って隣り合うトークンの間の角度は${360\degree / l_{max}}$となる。
 
 \begin{figure}
   \centering
@@ -93,13 +93,13 @@ transformerには他にもエンコーダ層のみを持つエンコーダtransf
   \caption{二次元平面上の単位円}
 \label{fig:pos-encoding-circle}
 
-この処理をToekn Embeddingで用いた例に適応させる。
 \end{figure}
+トークンの位置が$l_{max}$の時に必ずしも一周している必要はなく、円周上を回りきる前に止まっても良いため、隣り合うトークンの間の角度を${360\degree / l_{max}}$よりも小さく取ることが出来る。これらの考察を進めると、それぞれの角度が異なるような二次元の円周を複数個用意し、それらを全て合わせたものをpositional Encodingとして表せることに気が付く。
 % トークンのインデックス値そのものを用いて位置を表現する方針を取ることも出来るが、transformerでは位置情報を、token Embedding同様、高次元のベクトル空間へと埋め込む。
 
 % Positional Encodingではトークンごとの前後関係情報を先ほどのベクトルに足し上げる。
 
-足し上げるベクトルは、文章中における単語の位置を表現したもので、Token Embeddingで現れたベクトルの次元と等しくとる。この位置関係を表すベクトルも先ほどと同様に学習対象に選ぶ場合もあるが、通常は三角関数を用いてハードコーディングで定義をする。図~\ref{fig:tri-pos-encoding}は三角関数を用いたPositional Encodingをカラーマップで表現した図である。縦軸は単語の文章中における位置を表し横軸はベクトルのインデックスを表す。例えば10文字目という位置を表すベクトルの5要素目の値は ?????????だと分かる。
+Transformerでのpositional encodingの場合はまさにこの方針を取っており、得られたpositional encodingはtoken embeddingの出力結果に足し上げられる。この操作を行うことでトークンを表すベクトルは、トークンの意味に加えて、文章中におけるトークンの位置情報も内包することになる。図~\ref{fig:tri-pos-encoding}は三角関数を用いたPositional Encodingをカラーマップで表現した図である。縦軸は単語の文章中における位置を表し横軸はベクトルのインデックスを表す。例えば10文字目という位置を表すベクトルの5要素目の値は ?????????だと分かる。
 \begin{figure}
   \centering
     % \includegraphics[width=0.7\linewidth]{fig/1-dim-relu-3d.pdf}
@@ -114,7 +114,7 @@ transformerには他にもエンコーダ層のみを持つエンコーダtransf
   \text{具体例}
 \end{equation*}
 
-この様にpositional encodingの適用後は、ベクトルが単語の意味だけでなく文章中の位置も含むようになり、その結果それぞれのベクトル(元々はトークン)を並列的に処理できるようになった。
+この様にpositional encodingの適用後は、単語の意味だけでなく文章中の位置関係も一つのベクトルとして表現され、その結果それぞれのベクトル(元々はトークン)を並列的に処理できるようになる。
 
 
 \subsubsection{Attention}
