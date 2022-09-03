@@ -85,6 +85,7 @@
       },
   ],
   "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.latex.autoBuild.run": "onSave",
 }
 
 
