@@ -29,10 +29,21 @@ RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
 	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
-
-RUN tlmgr_path=$(echo /usr/local/texlive/2022/bin/*-linux)
-ENV PATH="${tlmgr_path}:${PATH}"
-RUN tlmgr install latexmk
-RUN tlmgr install scheme-medium was
-USER $USERNAME
 RUN git config --global --add safe.directory /home/${USERNAME}/project
+
+
+FROM base_vscode as base-amd64
+ENV PATH="/usr/local/texlive/2022/bin/x86_64-linux:${PATH}"
+RUN tlmgr install latexmk
+RUN tlmgr install scheme-medium
+RUN tlmgr install collection-langjapanese collection-langcjk xcomment
+
+
+FROM base_vscode as base-arm64
+ENV PATH="/usr/local/texlive/2022/bin/aarch64-linux:${PATH}"
+RUN tlmgr install latexmk
+RUN tlmgr install scheme-medium
+RUN tlmgr install collection-langjapanese collection-langcjk xcomment
+
+FROM base-${TARGETARCH}
+USER $USERNAME
