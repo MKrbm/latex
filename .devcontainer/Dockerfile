@@ -1,21 +1,11 @@
-ARG VARIANT="ubuntu-22.04"
+FROM ubuntu:22.04 as base_ubuntu
 
-FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT} AS base_vscode
 
-ARG USERNAME=user
-ARG GROUPNAME=user
+WORKDIR /home/project
+RUN apt-get update -y && apt-get -y install git vim software-properties-common htop cmake openssh-server
+COPY terminal-colors-branch.sh /tmp/
+RUN cat /tmp/terminal-colors-branch.sh >> ~/.bashrc
 
-RUN usermod -l user vscode
-RUN groupmod -n user vscode
-RUN echo "root:root" | chpasswd
-RUN echo "$USERNAME:$USERNAME" | chpasswd
-RUN usermod -d /home/$USERNAME -m $USERNAME
-RUN usermod -aG sudo user 
-
-WORKDIR /home/${USERNAME}/project
-
-# # # install some utilities
-RUN apt-get update -y && apt-get -y install git software-properties-common htop cmake openssh-server
 
 RUN apt-get update -q \
     && apt-get install -qy build-essential wget libfontconfig1 \
@@ -29,21 +19,21 @@ RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
 	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
-RUN git config --global --add safe.directory /home/${USERNAME}/project
+RUN git config --global --add safe.directory /home/project
 
 
-FROM base_vscode as base-amd64
+FROM base_ubuntu as base-amd64
 ENV PATH="/usr/local/texlive/2022/bin/x86_64-linux:${PATH}"
 RUN tlmgr install latexmk
-RUN tlmgr install scheme-medium
+RUN tlmgr install scheme-full
 RUN tlmgr install collection-langjapanese collection-langcjk xcomment
 
 
-FROM base_vscode as base-arm64
+FROM base_ubuntu as base-arm64
 ENV PATH="/usr/local/texlive/2022/bin/aarch64-linux:${PATH}"
 RUN tlmgr install latexmk
-RUN tlmgr install scheme-medium
+RUN tlmgr install scheme-full
 RUN tlmgr install collection-langjapanese collection-langcjk xcomment
 
 FROM base-${TARGETARCH}
-USER $USERNAME
+# USER $USERNAME

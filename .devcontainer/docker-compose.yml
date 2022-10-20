@@ -2,18 +2,18 @@ version: "3"
 services:
   ubuntu-texlive-ja:
     build: .
-    # image: kei0709/ubuntu_latex_ja
+    # image: kei0709/ubuntu_latex_ja:v1
     command: sleep infinity
     volumes:
-      - ../:/home/user/project
+      - ../:/home/project
       - type: bind
         source: ~/.ssh
-        target: /home/user/.ssh
+        target: /root/.ssh
         read_only: true
       - type: bind
         source: ~/.gitconfig
         target: /etc/gitconfig
         read_only: true
-      - ./.latexmkrc:/home/user/.latexmkrc
+      - ./.latexmkrc:/root/.latexmkrc
     environment:
       SHELL: "/bin/bash"

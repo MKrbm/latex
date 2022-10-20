@@ -1,73 +1,105 @@
 \documentclass{jarticle}
 
 % \usepackage[twoside,top=25truemm,bottom=20truemm,inner=30truemm,outer=20truemm]{geometry}
-
-\makeatletter
-\def\mojiparline#1{
-    \newcounter{mpl}
-    \setcounter{mpl}{#1}
-    \@tempdima=\linewidth
-    \advance\@tempdima by-\value{mpl}zw
-    \addtocounter{mpl}{-1}
-    \divide\@tempdima by \value{mpl}
-    \advance\kanjiskip by\@tempdima
-    \advance\parindent by\@tempdima
-}
-\makeatother
-\def\linesparpage#1{
-    \baselineskip=\textheight
-    \divide\baselineskip by #1
-}
-\usepackage{comment}
-\usepackage{booktabs}
-\usepackage{amsmath}
+\usepackage[english]{babel}
 \usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{physics}
 \usepackage[dvipdfmx]{graphicx}
-\usepackage{ascmac}
-\usepackage{tikz}
-\usepackage{siunitx}
-\usepackage{gensymb}
-\usetikzlibrary{svg.path,arrows,chains,matrix,positioning,scopes,intersections,calc,through,trees, positioning}
-\usepackage{circuitikz}
-\usepackage{soul}
+\usepackage{mathtools}
+% \usepackage{showkeys}　% separate tex file
+\usepackage[dvipdfm]{hyperref}
+\usepackage{blindtext}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage[labelfont=bf,format=plain,justification=raggedright,singlelinecheck=false]{caption}
 
-\title{基礎のニューラルネット}
 
-\newcommand\vc[1]{\boldsymbol{#1}}
-\newcommand\RR{\mathbb R}
-\newcommand\logi[1]{\varsigma(#1)}
-\newcommand\logid[1]{\varsigma'(#1)}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+\urlstyle{same}
 
-\newcommand\relu[1]{\mathrm{ReLU}(#1)}
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+
+\newcommand{\infdiv}{D\infdivx}
+% \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+
+
+
 
 \begin{document}
-% 一行あたり文字数の指定
-\mojiparline{40}
-% 1ページあたり行数の指定
-\linesparpage{38}
+\title{Potential Problems}
+\author{Keisuke Murota}
+\date{2022/6/14}
 
+
+
+\begin{titlepage}
 \maketitle
+\end{titlepage}
+% \pagenumbering{roman} % 要旨はRoman書体で表示
+\setcounter{page}{1} % 1から振り直す
+\newpage
+\pagenumbering{arabic}  % 論文本体はArabicで表示
+\setcounter{page}{1} % ページ番号を1から振り直す
 
-\tableofcontents
 
-% \newpage
-% \input body.tex
+% 修士論文や博士論文等で記述ページが多い場合は，\section（節） ではなく，\chapter（章） を使ってください
+\section{During investing into other projects}
+\begin{table}
+\caption{Notations}
+\begin{tabularx}{\textwidth}{@{}p{0.2\textwidth}X@{}}
+\toprule
+  Indices \\
+  $t$ & variable indicates time\\
+  $E(t)$ & total amount of pooled eth \\
+  $D(t)$ & total amount of generated dao tokens. \\
+  $R(t)$ & conversion rate from token to eth. It may be defined by $E/D$ \\
+  $P_i$ & symbol for i th projects\\
+  $e_i(t)$ & invested eth for $P_i$. This changes with time according to the situation of a project ($e_i(t=0)$ is eth set for $P_i$ in horizon).\\
+  $d_i$ & dao token secured for $P_i$, usually $d_i = e_i \times R$\\
+  $VD_j$ & amount of dao token j th voter pay.\\
+\bottomrule
+\end{tabularx}
+Note that $E, R, D $ changes with time elapsed, which means they are function of time $t$.
+\end{table}
 
-\subsection{深層化とバックプロパゲーション}
-\label{sec:back-propagation}
+There are a project $P_1$ requiring $e_1(0)$ eth in order for project going through in horizon.
+Let's say time passes from $t=0$ to $t=t^\prime$ and invested eth changes from $e_1(0)$ to $e_1(t^\prime) = e_1(0) \times \alpha$. Accordingly, total amount and conversion rate changes as 
+\begin{align*}
+    E(t^\prime) &= e_1^\prime + e = \alpha E + (1-\alpha)e\\
+    R(t^\prime) &= E(t^\prime)/D = \frac{\alpha E + (1-\alpha)e}{D} = R(0)(\alpha + (1-\alpha)x)
+\end{align*}
 
-\section{非階層型ニューラルネットモデル}
-\label{sec:non-hierarchical}
+Here, $e$ and $d$ are available (or remaining) eth and dao tokens. and $x = e/E$. 
 
-\section{深層学習へのいざない}
-\label{sec:deep-learning}
+Problems happen when try to convert all $d$ tokens to eth. Let's do a math.
+The difference between amount of eth corresponds to $d$ and available eth is 
+\begin{align*}
+    \Delta e = e(t^\prime) - e(0) = d \cdot ( R(t^\prime)  - R(0) )= dR(0)\cdot (\alpha - 1 + (1-\alpha)x) = e(\alpha - 1 + (1-\alpha)x) 
+\end{align*}
 
-\subsection{深層学習を支える技術}
-\label{sec:basis-deep-learning}
+Therefore, relative difference is 
+\begin{align*}
+    \Delta e / E =  x(\alpha - 1 + (1-\alpha)x) 
+\end{align*}
+This can take maximum value when $x = 1/2$ and it reduces to $\Delta e / E = (\alpha - 1)/4$ 
 
-\subsection{深層学習の応用}
-\label{sec:application-of-deep-learning}
 
-\subsection{transformer}
-\input transformer.tex
+\section{During voting step}
+
+
+
+
+
+% \subsection{Conjecture Gradient method}
 \end{document}

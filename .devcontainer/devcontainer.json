@@ -6,9 +6,9 @@
         "james-yu.latex-workshop"
     ],
     "service": "ubuntu-texlive-ja",
-    "workspaceFolder": "/home/user/project",
+    "workspaceFolder": "/home/project",
     "shutdownAction": "stopCompose",
-    "remoteUser": "user",
+    // "remoteUser": "root",
     "settings": {
       "latex-workshop.latex.autoBuild.interval": 0,
       "latex-workshop.latex.autoBuild.run": "onSave",
