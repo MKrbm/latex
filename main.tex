@@ -67,7 +67,6 @@
   $P_i$ & symbol for i th projects\\
   $e_i(t)$ & invested eth for $P_i$. This changes with time according to the situation of a project ($e_i(t=0)$ is eth set for $P_i$ in horizon).\\
   $d_i$ & dao token secured for $P_i$, usually $d_i = e_i \times R$\\
-  $VD_j$ & amount of dao token j th voter pay.\\
 \bottomrule
 \end{tabularx}
 Note that $E, R, D $ changes with time elapsed, which means they are function of time $t$.
@@ -98,7 +97,17 @@ This can take maximum value when $x = 1/2$ and it reduces to $\Delta e / E = (\a
 \section{During voting step}
 
 
-
+\begin{table}
+  \caption{Notations}
+  \begin{tabularx}{\textwidth}{@{}p{0.2\textwidth}X@{}}
+  \toprule
+    Indices \\
+    $vd_j$ & amount of dao token j th voter pay.\\
+    $vdt$ & amount of total dao for a project. $vdt = \sum_j vd_j$ \\
+  \bottomrule
+  \end{tabularx}
+  Note that $E, R, D $ changes with time elapsed, which means they are function of time $t$.
+  \end{table}
 
 
 % \subsection{Conjecture Gradient method}
